@@ -68,3 +68,21 @@ export const DarkTheme = createMuiTheme({
         // navbar: '#000000',
     },
 })
+
+export const MUI_FullWidth = ({
+    width: '100%',
+})
+
+export const MUI_HalfWidth = ({
+    width: '40%',
+})
+
+export const MUI_VerticalMargin = ({
+    marginTop: '1.5vh',
+    marginBottom: '1.5vh',
+})
+
+export const MUI_HorizontalMargin = ({
+    marginLeft: '1.5vw',
+    marginRight: '1.5vw',
+})

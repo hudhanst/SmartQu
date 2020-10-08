@@ -13,12 +13,14 @@ import { IoMdClose, IoMdSunny, IoMdMoon } from 'react-icons/io'
 // import { BsSun } from 'react-icons/bs'
 
 import Home from '../Layouts/Home'
+import Login from '../Layouts/Login'
+import Profile from '../Layouts/Users/Profile'
 import MenuImageRecognition from '../Layouts/Menu/MenuImageRecognition'
 import { SomethingWrong } from '../Containers/SomethingWrong'
 
 const FullMenu = (props) => {
     const [PreviewPage, setPreviewPage] = useState(null)
-    console.log(PreviewPage)
+    // console.log(PreviewPage)
     const Close_Drawer = () => {
         if (props.CloseFunction !== null) {
             props.CloseFunction(false)
@@ -34,6 +36,7 @@ const FullMenu = (props) => {
     const isFullScreen = props.isFullScreen ? props.isFullScreen : false
     const isDarkMode = props.isDarkMode ? props.isDarkMode : false
     // const MenuData = props.MenuData ? props.MenuData : []
+    const isAuth = props.isAuth ? props.isAuth : false
     const MenuData = [
         {
             Title: "Home",
@@ -85,7 +88,7 @@ const FullMenu = (props) => {
                     >
                         <Paper
                             variant='outlined'
-                            style={{ border: 'none', borderRadius: 0, width: '70vw', height: '100vh', backgroundColor: { ThemeBackgroundPaper } }}
+                            style={{ border: 'none', borderRadius: 0, width: '70vw', height: '100vh', backgroundColor: { ThemeBackgroundPaper }, overflow: 'auto' }}
                         >
                             {PreviewPage ?
                                 PreviewPage
@@ -106,7 +109,7 @@ const FullMenu = (props) => {
                 >
                     <Paper
                         variant='outlined'
-                        style={{ border: 'none', borderRadius: 0, width: isFullScreen ? '30vw' : "100vw", height: '100vh', backgroundColor: ThemePrimaryMain }}
+                        style={{ border: 'none', borderRadius: 0, width: isFullScreen ? '30vw' : "100vw", height: '100vh', backgroundColor: ThemePrimaryMain, overflow: 'auto' }}
                     >
                         <Typography>
                             {isDarkMode ?
@@ -127,27 +130,59 @@ const FullMenu = (props) => {
                         <div
                             style={{ marginTop: "15vh" }}
                         >
-
+                            <Slide
+                                direction={'down'}
+                                in={true}
+                                timeout={650}
+                            // mountOnEnter
+                            // unmountOnExit
+                            >
+                                <Typography
+                                    align='center'
+                                    variant='h3'
+                                    onMouseOver={() => setPreviewPage(isAuth ? <Profile /> : <Login />)}
+                                    onClick={() => Close_Drawer()}
+                                    style={{ margin: '1vw', }}
+                                >
+                                    <GoTo
+                                        to={isAuth ? '/users/profile' : '/login'}
+                                        style={{ textDecoration: 'none', color: ThemePrimaryText }}
+                                    >
+                                        {isAuth ?
+                                            "Profile"
+                                            : "LogIn"
+                                        }
+                                    </GoTo>
+                                </Typography>
+                            </Slide>
                         </div>
                         <div
                             style={{ marginTop: "1vh", padding: '1vw' }}
                         >
                             {MenuData.map((item, index) => (
-                                <Typography
+                                <Slide
                                     key={`MenuData_${index}`}
-                                    variant='h3'
-                                    color='textPrimary'
-                                    onMouseOver={() => setPreviewPage(item.Title ? item.Comp : <SomethingWrong />)}
-                                    onClick={() => Close_Drawer()}
-                                    style={{ margin: '1vw', }}
+                                    direction={'left'}
+                                    in={true}
+                                    timeout={650 + (100 * (index + 1))}
+                                // mountOnEnter
+                                // unmountOnExit
                                 >
-                                    <GoTo
-                                        to={item.Url ? item.Url : '/PageNotFound'}
-                                        style={{ textDecoration: 'none', color: ThemePrimaryText }}
+                                    <Typography
+                                        variant='h3'
+                                        color='textPrimary'
+                                        onMouseOver={() => setPreviewPage(item.Title ? item.Comp : <SomethingWrong />)}
+                                        onClick={() => Close_Drawer()}
+                                        style={{ margin: '1vw', }}
                                     >
-                                        {item.Title ? item.Title : ''}
-                                    </GoTo>
-                                </Typography>
+                                        <GoTo
+                                            to={item.Url ? item.Url : '/PageNotFound'}
+                                            style={{ textDecoration: 'none', color: ThemePrimaryText }}
+                                        >
+                                            {item.Title ? item.Title : ''}
+                                        </GoTo>
+                                    </Typography>
+                                </Slide>
                             ))}
                         </div>
                     </Paper>
@@ -158,8 +193,10 @@ const FullMenu = (props) => {
 }
 
 const mapStateToProps = state => ({
-    // ////// Generic
+    ////// Generic
     isDarkMode: state.General.isDarkMode,
+    ////// Auth
+    isAuth: state.Auth.isAuth,
 })
 
 const mapDispatchToProps = dispatch => ({

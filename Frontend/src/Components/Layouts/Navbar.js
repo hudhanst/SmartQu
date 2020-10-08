@@ -56,7 +56,7 @@ const Navbar = (props) => {
 
             <AppBar
                 position='relative'
-                style={{ border: '1 px solid red', boxShadow: 'none', backgroundColor: 'transparent', marginBottom: '8vh', padding: '1%' }}
+                style={{ border: '1 px solid red', boxShadow: 'none', backgroundColor: 'transparent', padding: '1%' }}
             >
                 <Toolbar
                     style={{ margin: 0, height: `${ToolbarHeight}vh`, padding: '1vh 1vw 1vh 1vw', border: 'none' }}
@@ -149,7 +149,7 @@ const Navbar = (props) => {
                     <FullMenu
                         isFullScreen={isFullScreen}
                         CloseFunction={setDrawerCondition}
-                        // MenuData={NavMenuData}
+                    // MenuData={NavMenuData}
                     />
                     : null}
             </Drawer>

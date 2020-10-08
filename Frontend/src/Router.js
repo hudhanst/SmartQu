@@ -3,6 +3,8 @@ import React from 'react'
 import { Route, Switch } from 'react-router-dom'
 
 import Home from './Components/Layouts/Home'
+import Login from './Components/Layouts/Login'
+import Profile from './Components/Layouts/Users/Profile'
 import MenuImageRecognition from './Components/Layouts/Menu/MenuImageRecognition'
 import { PageNotFound } from './Components/Containers/SomethingWrong'
 
@@ -23,6 +25,22 @@ const BaseRouter = (props) => {
                 path="/image-recognition"
                 component={() =>
                     <MenuImageRecognition />
+                }
+            />
+
+            <Route
+                exact
+                path="/users/profile"
+                component={() =>
+                    <Profile />
+                }
+            />
+
+            <Route
+                exact
+                path="/login"
+                component={() =>
+                    <Login />
                 }
             />
 

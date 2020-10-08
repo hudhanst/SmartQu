@@ -29,5 +29,5 @@ const Root = (
 
 ReactDOM.render(Root, document.getElementById('root'))
 
-// serviceWorker.unregister()
-serviceWorker.register() // https://bit.ly/CRA-PWA
+serviceWorker.unregister()
+// serviceWorker.register() // https://bit.ly/CRA-PWA
