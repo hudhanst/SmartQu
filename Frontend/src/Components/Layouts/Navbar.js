@@ -8,8 +8,9 @@ import { useTheme, AppBar, Toolbar, Grid, Button, Drawer, Grow, Fade } from '@ma
 
 import { HiMenu } from 'react-icons/hi'
 
+import { Major_Menu_Data } from '../../Store/DataBases/Menu.DataBases'
 import Logo from '../../IMG/Logo.png'
-import FullMenu from '../Containers/FullMenu'
+import FullNavbar from './FullNavbar'
 
 const Navbar = (props) => {
     const [scrollPosition, setScrollPosition] = useState(0)
@@ -30,20 +31,7 @@ const Navbar = (props) => {
     const vhToPixel = (vh) => {
         return Math.round(window.innerHeight / (100 / vh))
     }
-    const NavMenuData = [
-        {
-            Title: 'Image',
-            Url: '/image-recognition',
-        },
-        {
-            Title: 'Text',
-            Url: '/',
-        },
-        {
-            Title: 'Other',
-            Url: '/',
-        },
-    ]
+    const NavMenuData = Major_Menu_Data()
     const Theme = useTheme()
     const ThemeTextPrimary = Theme.palette.text.primary
     const isFullScreen = props.isFullScreen ? props.isFullScreen : false
@@ -90,21 +78,22 @@ const Navbar = (props) => {
                                 alignItems="center"
                             >
                                 {NavMenuData.map((item, index) => (
-                                    <Fragment
-                                        key={`NavMenuData${index}`}
-                                    >
-                                        {index < 5 ?
-                                            <GoTo
-                                                to={item.Url}
-                                                style={{ textDecoration: 'none', border: 'none', color: ThemeTextPrimary, fontSize: '2vw', display: 'inline-block', height: 'auto', width: '15%', marginLeft: '2.5%', marginRight: '2.5%', marginTop: '1vh', wordBreak: 'normal' }}
+                                    (index > 0 && index < 6 && index < NavMenuData.length - 1) ?
+                                        (!item.PrivacyType || item.PrivacyType === 'Public') ?
+                                            <Fragment
+                                                key={`NavMenuData${index}`}
                                             >
-                                                <center>
-                                                    {item.Title}
-                                                </center>
-                                            </GoTo>
+                                                <GoTo
+                                                    to={item.Url ? item.Url : '/PageNotFound'}
+                                                    style={{ textDecoration: 'none', border: 'none', color: ThemeTextPrimary, fontSize: '2vw', display: 'inline-block', height: 'auto', width: '15%', marginLeft: '2.5%', marginRight: '2.5%', marginTop: '1vh', wordBreak: 'normal' }}
+                                                >
+                                                    <center>
+                                                        {item.Title}
+                                                    </center>
+                                                </GoTo>
+                                            </Fragment>
                                             : null
-                                        }
-                                    </Fragment>
+                                        : null
                                 ))}
                             </Grid>
                         </div>
@@ -146,7 +135,7 @@ const Navbar = (props) => {
             // style={{backgroundColor:'black'}}
             >
                 {isDrawerOpen ?
-                    <FullMenu
+                    <FullNavbar
                         isFullScreen={isFullScreen}
                         CloseFunction={setDrawerCondition}
                     // MenuData={NavMenuData}

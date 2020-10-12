@@ -12,13 +12,13 @@ import { useTheme, Paper, Grid, Typography, Slide } from '@material-ui/core'
 import { IoMdClose, IoMdSunny, IoMdMoon } from 'react-icons/io'
 // import { BsSun } from 'react-icons/bs'
 
-import Home from '../Layouts/Home'
-import Login from '../Layouts/Login'
-import Profile from '../Layouts/Users/Profile'
-import MenuImageRecognition from '../Layouts/Menu/MenuImageRecognition'
+import { Major_Menu_Data } from '../../Store/DataBases/Menu.DataBases'
+import Home from './Home'
+import Login from './Login'
+import UserProfile from './Users/UserProfile'
 import { SomethingWrong } from '../Containers/SomethingWrong'
 
-const FullMenu = (props) => {
+const FullNavbar = (props) => {
     const [PreviewPage, setPreviewPage] = useState(null)
     // console.log(PreviewPage)
     const Close_Drawer = () => {
@@ -37,28 +37,7 @@ const FullMenu = (props) => {
     const isDarkMode = props.isDarkMode ? props.isDarkMode : false
     // const MenuData = props.MenuData ? props.MenuData : []
     const isAuth = props.isAuth ? props.isAuth : false
-    const MenuData = [
-        {
-            Title: "Home",
-            Url: '/',
-            Comp: (<Home />)
-        },
-        {
-            Title: "Image",
-            Url: '/image-recognition',
-            Comp: (<MenuImageRecognition />),
-        },
-        {
-            Title: "Text",
-            // Url: '/image-recognition',
-            Comp: (<SomethingWrong />)
-        },
-        {
-            Title: "Other",
-            // Url: '/image-recognition',
-            Comp: (<SomethingWrong />)
-        }
-    ]
+    const MenuData = Major_Menu_Data()
 
     const Theme = useTheme()
     const ThemePrimaryMain = Theme.palette.primary.main
@@ -140,7 +119,7 @@ const FullMenu = (props) => {
                                 <Typography
                                     align='center'
                                     variant='h3'
-                                    onMouseOver={() => setPreviewPage(isAuth ? <Profile /> : <Login />)}
+                                    onMouseOver={() => setPreviewPage(isAuth ? <UserProfile /> : <Login />)}
                                     onClick={() => Close_Drawer()}
                                     style={{ margin: '1vw', }}
                                 >
@@ -160,29 +139,31 @@ const FullMenu = (props) => {
                             style={{ marginTop: "1vh", padding: '1vw' }}
                         >
                             {MenuData.map((item, index) => (
-                                <Slide
-                                    key={`MenuData_${index}`}
-                                    direction={'left'}
-                                    in={true}
-                                    timeout={650 + (100 * (index + 1))}
-                                // mountOnEnter
-                                // unmountOnExit
-                                >
-                                    <Typography
-                                        variant='h3'
-                                        color='textPrimary'
-                                        onMouseOver={() => setPreviewPage(item.Title ? item.Comp : <SomethingWrong />)}
-                                        onClick={() => Close_Drawer()}
-                                        style={{ margin: '1vw', }}
+                                (!item.PrivacyType || item.PrivacyType === 'Public') ?
+                                    <Slide
+                                        key={`MenuData_${index}`}
+                                        direction={'left'}
+                                        in={true}
+                                        timeout={650 + (100 * (index + 1))}
+                                    // mountOnEnter
+                                    // unmountOnExit
                                     >
-                                        <GoTo
-                                            to={item.Url ? item.Url : '/PageNotFound'}
-                                            style={{ textDecoration: 'none', color: ThemePrimaryText }}
+                                        <Typography
+                                            variant='h3'
+                                            color='textPrimary'
+                                            onMouseOver={() => setPreviewPage(item.Title ? item.Comp : <SomethingWrong />)}
+                                            onClick={() => Close_Drawer()}
+                                            style={{ margin: '1vw', }}
                                         >
-                                            {item.Title ? item.Title : ''}
-                                        </GoTo>
-                                    </Typography>
-                                </Slide>
+                                            <GoTo
+                                                to={item.Url ? item.Url : '/PageNotFound'}
+                                                style={{ textDecoration: 'none', color: ThemePrimaryText }}
+                                            >
+                                                {item.Title ? item.Title : ''}
+                                            </GoTo>
+                                        </Typography>
+                                    </Slide>
+                                    : null
                             ))}
                         </div>
                     </Paper>
@@ -203,4 +184,4 @@ const mapDispatchToProps = dispatch => ({
     Dark_Mode: (InputData) => dispatch(Dark_Mode(InputData)),
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(FullMenu)
+export default connect(mapStateToProps, mapDispatchToProps)(FullNavbar)
