@@ -1,7 +1,21 @@
 const User = require('../../../Models/User')
 const bcrypt = require('bcryptjs')
 
-const Create_User = async (UserName, Password, Name, ProfilePicture, isActive, isAdmin, isSuperUser, RegisterDate, LastActive) => {
+exports.Create_Hashed_Password = async (Password) => {
+    try {
+        const salt = await bcrypt.genSalt(10)
+        const HashedPassword = await bcrypt.hash(String(Password), salt)
+        return HashedPassword
+    } catch (err) {
+        console.log('Log: exports.Create_Hashed_Password -> err', err)
+        throw {
+            msg: err.msg ? err.msg : "exports.Create_Hashed_Password",
+            errorDetail: err
+        }
+    }
+}
+
+exports.Create_User = async (UserName, Password, Name, ProfilePicture, isActive, isAdmin, isSuperUser, RegisterDate, LastActive) => {
     try {
         if (!UserName || !Password || !Name) {
             throw {
@@ -15,8 +29,7 @@ const Create_User = async (UserName, Password, Name, ProfilePicture, isActive, i
             }
         }
 
-        const salt = await bcrypt.genSalt(10)
-        const HashedPassword = await bcrypt.hash(String(Password), salt)
+        const HashedPassword = await this.Create_Hashed_Password(Password)
 
         const newUser = new User({
             UserName: UserName,
@@ -43,7 +56,8 @@ const Create_User = async (UserName, Password, Name, ProfilePicture, isActive, i
 
 exports.Create_SuperUser = async (UserName, Password, Name, ProfilePicture) => {
     try {
-        const newSuperUser = await Create_User(UserName, Password, Name, ProfilePicture, true, true, true)
+        // const newSuperUser = await Create_User(UserName, Password, Name, ProfilePicture, true, true, true)
+        const newSuperUser = await this.Create_User(UserName, Password, Name, ProfilePicture, true, true, true)
         return newSuperUser
     } catch (err) {
         console.log('Log: exports.Create_SuperUser -> err', err)

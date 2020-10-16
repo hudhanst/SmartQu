@@ -12,6 +12,7 @@ import { IoMdImages, IoIosPeople } from 'react-icons/io'
 const IconStyle = { fontSize: '3vw' }
 
 export const TypePublic = 'Public'
+export const TypeProtected = 'Protected'
 // export const TypePrivacy = 'Privacy'
 export const TypeSuperPrivacy = 'SuperPrivacy'
 

@@ -1,13 +1,17 @@
 const express = require('express')
-
 const mongoose = require('mongoose')
+
+const StaticFolderPath = require('./config/keys').StaticFolderPath
 
 const app = express()
 
-// BodyParser middleware
+////// BodyParser middleware
 app.use(express.json({ limit: '50mb' }))
 
-// Add headers
+////// Static file config
+app.use(`/${StaticFolderPath}`, express.static(`${StaticFolderPath}`))
+
+////// Add headers
 app.use((req, res, next) => {
 
     // Website you wish to allow to connect
@@ -41,10 +45,10 @@ app.use((req, res, next) => {
     next()
 })
 
-// Db config
+////// Db config
 const db = require('./config/keys').mongoURI
 
-// connect to Mongoose
+////// connect to Mongoose
 mongoose.connect(db, {
     useNewUrlParser: true, //////  it uses to parse MongoDB connection strings
     useFindAndModify: false, ////// you can use findOneAndDelete, findOneAndUpdate & etc
@@ -59,6 +63,7 @@ mongoose.connect(db, {
     })
 
 const port = 5000
+////// End -Db config
 
 app.listen(port, () =>
     console.log(`server start on port ${port}`)
@@ -69,6 +74,7 @@ app.listen(port, () =>
 //     next()
 // })
 
-// use route
+////// use route
 app.use('/api/auth', require('./Routers/Apis/Auth'))
-// app.use('/api/auth', require('./Routers/Apis/User'))
+app.use('/api/users', require('./Routers/Apis/User'))
+////// End-use route

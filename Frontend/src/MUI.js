@@ -34,6 +34,7 @@ export const LightTheme = createMuiTheme({
     },
 
     custom: {
+        ReadOnlyField: '#E0E0E0',
         // navbar: '#382933',
     },
 })
@@ -65,6 +66,7 @@ export const DarkTheme = createMuiTheme({
         // },
     },
     custom: {
+        ReadOnlyField: '#030912',
         // navbar: '#000000',
     },
 })

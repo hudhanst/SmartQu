@@ -58,12 +58,12 @@ router.post('/login', async (req, res) => {
             .json({
                 token: token._id,
                 user: {
-                    id: UserData._id,
+                    _id: UserData._id,
                     UserName: UserData.UserName,
-                    Name: UserData._Name,
-                    isActive: UserData._isActive,
-                    isAdmin: UserData._isAdmin,
-                    isSuperUser: UserData._isSuperUser,
+                    Name: UserData.Name,
+                    isActive: UserData.isActive,
+                    isAdmin: UserData.isAdmin,
+                    isSuperUser: UserData.isSuperUser,
                 }
             })
     } catch (err) {

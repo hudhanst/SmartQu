@@ -7,7 +7,7 @@ import {
     LOGOUT,
     LOAD_USER,
     TOKEN_EXPIRED,
-    // RELOAD_PAGE
+    RELOAD_PAGE
 } from './Type.Actions'
 
 export const Default_Header = () => {
@@ -86,6 +86,7 @@ export const Load_User = () => async (dispatch, getState) => {
         // console.dir(err)
         if (err.response.data.msg === Expired_Messages() || err.response.data.msg === Invalid_Token_Messages()) {
             dispatch({ type: TOKEN_EXPIRED })
+            dispatch({ type: RELOAD_PAGE })
         }
         dispatch({ type: AUTH_LOADED })
     }
@@ -102,6 +103,7 @@ export const Log_Out = () => async (dispatch, getState) => {
                 payload: Responses
             })
             dispatch({ type: AUTH_LOADED })
+            dispatch({ type: RELOAD_PAGE })
         }
     } catch (err) {
         console.log('Log: Log_In -> err', err)
@@ -109,5 +111,22 @@ export const Log_Out = () => async (dispatch, getState) => {
             dispatch({ type: TOKEN_EXPIRED })
         }
         dispatch({ type: AUTH_LOADED })
+    }
+}
+
+export const Permission_isSuperUser = (AccountAuth) => (dispatch) => {
+    // console.log('logout')
+    try {
+        const User = AccountAuth
+        if (User.isSuperUser) {
+            return true
+        } else {
+            const newError = ({
+                msg: 'This Action are forbidden'
+            })
+            throw newError
+        }
+    } catch (err) {
+        return err
     }
 }

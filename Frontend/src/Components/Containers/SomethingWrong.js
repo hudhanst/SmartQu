@@ -96,3 +96,40 @@ export const SomethingWrong = (props) => {
         </Fragment>
     )
 }
+
+export const DataNotFound = (props) => {
+    return (
+        <Fragment>
+            <Typography
+                align='center'
+                style={{ marginTop: '1vh', padding: '10px' }}
+            >
+                <img
+                    src={Logo}
+                    alt='Logo'
+                />
+            </Typography>
+            <Typography
+                variant='h2'
+                align='center'
+            >
+                Some thing wrong with the data
+        </Typography>
+            <Typography
+                variant='subtitle1'
+                align='center'
+            >
+                Some thing wrong happened, we cant get data you try to access
+        </Typography>
+            {props.ket ?
+                <Typography
+                    variant='h6'
+                    align='center'
+                >
+                    {props.ket}
+                </Typography>
+                : null
+            }
+        </Fragment>
+    )
+}
