@@ -1,13 +1,19 @@
 import axios from 'axios'
 
 import {
-    AUTH_LOADING,
-    AUTH_LOADED,
+    // AUTH_LOADING,
+    // AUTH_LOADED,
     LOGIN,
     LOGOUT,
     LOAD_USER,
     TOKEN_EXPIRED,
-    RELOAD_PAGE
+    RELOAD_PAGE,
+    ACTION_LOADING,
+    ACTION_LOADED,
+    // COMPONENT_LOADING,
+    // COMPONENT_LOADED,
+    PAGE_LOADING,
+    PAGE_LOADED,
 } from './Type.Actions'
 
 export const Default_Header = () => {
@@ -54,7 +60,7 @@ export const Invalid_Token_Messages = () => {
 
 export const Log_In = (UserName, Password) => async (dispatch) => {
     try {
-        dispatch({ type: AUTH_LOADING })
+        dispatch({ type: ACTION_LOADING })
         const body = JSON.stringify({ UserName, Password })
         const Responses = await axios.post(`${Base_URL()}api/auth/login`, body, Default_Header())
         if (Responses) {
@@ -62,24 +68,25 @@ export const Log_In = (UserName, Password) => async (dispatch) => {
                 type: LOGIN,
                 payload: Responses.data
             })
-            dispatch({ type: AUTH_LOADED })
+            dispatch({ type: ACTION_LOADED })
         }
     } catch (err) {
         console.log('Log: Log_In -> err', err)
-        dispatch({ type: AUTH_LOADED })
+        setTimeout(() => null, 300000)
+        dispatch({ type: ACTION_LOADED })
     }
 }
 
 export const Load_User = () => async (dispatch, getState) => {
     try {
-        dispatch({ type: AUTH_LOADING })
+        dispatch({ type: PAGE_LOADING })
         const Responses = await axios.get(`${Base_URL()}api/auth/user`, Token_Config(getState))
         if (Responses) {
             dispatch({
                 type: LOAD_USER,
                 payload: Responses.data
             })
-            dispatch({ type: AUTH_LOADED })
+            dispatch({ type: PAGE_LOADED })
         }
     } catch (err) {
         console.log('Log: Log_In -> err', err)
@@ -88,21 +95,21 @@ export const Load_User = () => async (dispatch, getState) => {
             dispatch({ type: TOKEN_EXPIRED })
             dispatch({ type: RELOAD_PAGE })
         }
-        dispatch({ type: AUTH_LOADED })
+        dispatch({ type: PAGE_LOADED })
     }
 }
 
 export const Log_Out = () => async (dispatch, getState) => {
     // console.log('logout')
     try {
-        dispatch({ type: AUTH_LOADING })
+        dispatch({ type: ACTION_LOADING })
         const Responses = await axios.post(`${Base_URL()}api/auth/logout`, null, Token_Config(getState))
         if (Responses) {
             dispatch({
                 type: LOGOUT,
                 payload: Responses
             })
-            dispatch({ type: AUTH_LOADED })
+            dispatch({ type: ACTION_LOADED })
             dispatch({ type: RELOAD_PAGE })
         }
     } catch (err) {
@@ -110,7 +117,7 @@ export const Log_Out = () => async (dispatch, getState) => {
         if (err.response.data.msg === Expired_Messages() || err.response.data.msg === Invalid_Token_Messages()) {
             dispatch({ type: TOKEN_EXPIRED })
         }
-        dispatch({ type: AUTH_LOADED })
+        dispatch({ type: ACTION_LOADED })
     }
 }
 

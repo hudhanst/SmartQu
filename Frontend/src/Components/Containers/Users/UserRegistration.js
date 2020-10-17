@@ -3,7 +3,7 @@ import React, { Fragment, useState } from 'react'
 import { connect } from 'react-redux'
 import { Register_New_User } from '../../../Store/Actions/User.Actions'
 
-import { Typography, TextField, FormGroup, FormLabel, Switch, Button } from '@material-ui/core'
+import { useTheme, Typography, TextField, FormGroup, FormLabel, Switch, Button, CircularProgress } from '@material-ui/core'
 import { MUI_VerticalMargin } from '../../../MUI'
 
 const UserRegistration = (props) => {
@@ -37,6 +37,8 @@ const UserRegistration = (props) => {
     }
 
     const TextFieldStyle = { ...MUI_VerticalMargin, width: '95%', borderRadius: 10 }
+    const Theme = useTheme()
+    const ThemeSuccess = Theme.palette.success.main
 
     return (
         <Fragment>
@@ -166,10 +168,17 @@ const UserRegistration = (props) => {
                         variant='contained'
                         color='primary'
                         size='large'
+                        disabled={props.isActionLoading ? true : false}
                         style={{ ...MUI_VerticalMargin, width: '98%' }}
                     >
                         Register a New User
-                </Button>
+                        {
+                            props.isActionLoading && <CircularProgress
+                                size={24}
+                                thickness={8}
+                                style={{ color: ThemeSuccess, position: 'absolute' }}
+                            />}
+                    </Button>
                 </center>
             </form>
         </Fragment>
@@ -177,6 +186,8 @@ const UserRegistration = (props) => {
 }
 
 const mapStateToProps = state => ({
+    ////// General
+    isActionLoading: state.General.isActionLoading,
     ////// Auth
     User: state.Auth.User,
 })

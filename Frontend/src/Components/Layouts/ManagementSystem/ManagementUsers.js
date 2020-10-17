@@ -5,8 +5,8 @@ import { connect } from 'react-redux'
 import { Get_User_Id, Load_User_List, Delete_User } from '../../../Store/Actions/User.Actions'
 // import { Sort_Integer_Column, Sort_String_Column } from '../../Containers/SortingSystem'
 
-import { Button } from '@material-ui/core'
-import { Container, Table, TableHead, TableBody, TableRow, TableCell } from '@material-ui/core'
+import { useTheme, Button, CircularProgress } from '@material-ui/core'
+import { Container, Table, TableHead, TableBody, TableRow, TableCell } from '@material-ui/core' ////// incase create table function i create work without bug remove this line
 import { MUI_VerticalMargin } from '../../../MUI'
 
 import TitleMenu from '../../Containers/Menu/TitleMenu'
@@ -15,6 +15,7 @@ import UserRegistration from '../../Containers/Users/UserRegistration'
 import UserDetail from '../../Containers/Users/UserDetail'
 import UserUpdate from '../../Containers/Users/UserUpdate'
 // import CreateTable from '../../Containers/CreateTable'
+// import LoadingPage from '../../Containers/LoadingPage'
 
 const ManagementUsers = (props) => {
     useEffect(() => {
@@ -23,6 +24,9 @@ const ManagementUsers = (props) => {
     }, [])
     const ComponentName = 'ManagementUsers'
     const Data = props.UserList ? props.UserList : []
+
+    const Theme = useTheme()
+    const ThemeSuccess = Theme.palette.success.main
 
     const DeleteFooter = () => {
         const UserAuth = props.User
@@ -33,13 +37,19 @@ const ManagementUsers = (props) => {
                     variant='contained'
                     color='secondary'
                     size='large'
-                    disabled={!DeletedUserId ? true : false}
+                    disabled={!DeletedUserId || props.isActionLoading ? true : false}
                     onClick={() => props.Delete_User(DeletedUserId, UserAuth)}
                     style={{ ...MUI_VerticalMargin, width: '98%' }}
                 >
                     {DeletedUserId ?
                         'Delete User'
                         : 'User Id Not Found'}
+                    {
+                        props.isActionLoading && <CircularProgress
+                            size={24}
+                            thickness={8}
+                            style={{ color: ThemeSuccess, position: 'absolute' }}
+                        />}
                 </Button>
             </center>
         )
@@ -97,33 +107,36 @@ const ManagementUsers = (props) => {
     //     },
     // ]
 
-    return (
-        <Fragment>
-            <center>
-                <TitleMenu
-                    Title='Management Users'
-                    Url='/management/users'
-                // Independent={true}
-                />
-                <CreateModal
-                    ////// BUTTON 
-                    ButtonLabel='Add New User'
-                    ButtonSize='large'
-                    ButtonColor='primary'
-                    ButtonOnClickEvent={() => props.Get_User_Id(123)}
-                    ButtonStyle={{ ...MUI_VerticalMargin, width: '90%' }}
-                    ////// MODAL
-                    ModalSize='l'
-                    ////// Header 
-                    Header='User Registration'
-                    ////// BODY 
-                    Body={<UserRegistration />}
-                ////// FOOTER 
-                />
+    return props.isComponentLoading ?
+        // <LoadingPage />
+        null
+        : (
+            <Fragment>
+                <center>
+                    <TitleMenu
+                        Title='Management Users'
+                        Url='/management/users'
+                    // Independent={true}
+                    />
+                    <CreateModal
+                        ////// BUTTON 
+                        ButtonLabel='Add New User'
+                        ButtonSize='large'
+                        ButtonColor='primary'
+                        ButtonOnClickEvent={() => props.Get_User_Id(123)}
+                        ButtonStyle={{ ...MUI_VerticalMargin, width: '90%' }}
+                        ////// MODAL
+                        ModalSize='l'
+                        ////// Header 
+                        Header='User Registration'
+                        ////// BODY 
+                        Body={<UserRegistration />}
+                    ////// FOOTER 
+                    />
 
-            </center>
+                </center>
 
-            {/* <CreateTable
+                {/* <CreateTable
                 TableId={ComponentName}
                 TableHeadData={HeadData}
                 TableBodyData={Data}
@@ -131,118 +144,121 @@ const ManagementUsers = (props) => {
             /> */}
 
 
-            {/* <hr /> */}
+                {/* <hr /> */}
 
 
-            <Container>
-                <Table
-                    id={ComponentName}
-                    stickyHeader
-                >
-                    <TableHead>
-                        <TableRow>
-                            <TableCell
+                <Container>
+                    <Table
+                        id={ComponentName}
+                        stickyHeader
+                    >
+                        <TableHead>
+                            <TableRow>
+                                <TableCell
                                 // onClick={() => Sort_Integer_Column(ComponentName, 0)}
-                            >
-                                index
+                                >
+                                    index
                             </TableCell>
-                            <TableCell
+                                <TableCell
                                 // onClick={() => Sort_String_Column(ComponentName, 0)}
-                            >
-                                Id
+                                >
+                                    Id
                             </TableCell>
-                            <TableCell>
-                                User Name
+                                <TableCell>
+                                    User Name
                             </TableCell>
-                            <TableCell>
-                                Name
+                                <TableCell>
+                                    Name
                             </TableCell>
-                            <TableCell>
-                                View
+                                <TableCell>
+                                    View
                             </TableCell>
-                            <TableCell>
-                                Update
+                                <TableCell>
+                                    Update
                             </TableCell>
-                            <TableCell>
-                                Delete
+                                <TableCell>
+                                    Delete
                             </TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {Data.map((item, index) => (
-                            <TableRow
-                                key={index}
-                                hover
-                            >
-                                <TableCell>
-                                    {index + 1}
-                                </TableCell>
-                                <TableCell>
-                                    {item._id}
-                                </TableCell>
-                                <TableCell>
-                                    {item.UserName}
-                                </TableCell>
-                                <TableCell>
-                                    {item.Name}
-                                </TableCell>
-                                <TableCell>
-                                    <CreateModal
-                                        ////// BUTTON 
-                                        ButtonLabel='View'
-                                        ButtonVariant='outlined'
-                                        ButtonColor='default'
-                                        ButtonOnClickEvent={() => props.Get_User_Id(item._id)}
-                                        ////// MODAL
-                                        ModalSize='l'
-                                        ////// Header 
-                                        Header='View'
-                                        ////// BODY 
-                                        Body={<UserDetail />}
-                                    />
-                                </TableCell>
-                                <TableCell>
-                                    <CreateModal
-                                        ////// BUTTON 
-                                        ButtonLabel='Update'
-                                        ButtonVariant='outlined'
-                                        ButtonColor='primary'
-                                        ButtonOnClickEvent={() => props.Get_User_Id(item._id)}
-                                        ////// MODAL
-                                        ModalSize='l'
-                                        ////// Header 
-                                        Header='Update'
-                                        ////// BODY 
-                                        Body={<UserUpdate />}
-                                    />
-                                </TableCell>
-                                <TableCell>
-                                    <CreateModal
-                                        ////// BUTTON 
-                                        ButtonLabel='Delete'
-                                        ButtonVariant='outlined'
-                                        ButtonColor='secondary'
-                                        ButtonOnClickEvent={() => props.Get_User_Id(item._id)}
-                                        ////// MODAL
-                                        ModalSize='l'
-                                        ////// Header 
-                                        Header='Delete'
-                                        ////// BODY 
-                                        Body={<UserDetail />}
-                                        ////// FOOTER 
-                                        Footer={<DeleteFooter />}
-                                    />
-                                </TableCell>
                             </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-            </Container>
-        </Fragment>
-    )
+                        </TableHead>
+                        <TableBody>
+                            {Data.map((item, index) => (
+                                <TableRow
+                                    key={index}
+                                    hover
+                                >
+                                    <TableCell>
+                                        {index + 1}
+                                    </TableCell>
+                                    <TableCell>
+                                        {item._id}
+                                    </TableCell>
+                                    <TableCell>
+                                        {item.UserName}
+                                    </TableCell>
+                                    <TableCell>
+                                        {item.Name}
+                                    </TableCell>
+                                    <TableCell>
+                                        <CreateModal
+                                            ////// BUTTON 
+                                            ButtonLabel='View'
+                                            ButtonVariant='outlined'
+                                            ButtonColor='default'
+                                            ButtonOnClickEvent={() => props.Get_User_Id(item._id)}
+                                            ////// MODAL
+                                            ModalSize='l'
+                                            ////// Header 
+                                            Header='View'
+                                            ////// BODY 
+                                            Body={<UserDetail />}
+                                        />
+                                    </TableCell>
+                                    <TableCell>
+                                        <CreateModal
+                                            ////// BUTTON 
+                                            ButtonLabel='Update'
+                                            ButtonVariant='outlined'
+                                            ButtonColor='primary'
+                                            ButtonOnClickEvent={() => props.Get_User_Id(item._id)}
+                                            ////// MODAL
+                                            ModalSize='l'
+                                            ////// Header 
+                                            Header='Update'
+                                            ////// BODY 
+                                            Body={<UserUpdate />}
+                                        />
+                                    </TableCell>
+                                    <TableCell>
+                                        <CreateModal
+                                            ////// BUTTON 
+                                            ButtonLabel='Delete'
+                                            ButtonVariant='outlined'
+                                            ButtonColor='secondary'
+                                            ButtonOnClickEvent={() => props.Get_User_Id(item._id)}
+                                            ////// MODAL
+                                            ModalSize='l'
+                                            ////// Header 
+                                            Header='Delete'
+                                            ////// BODY 
+                                            Body={<UserDetail />}
+                                            ////// FOOTER 
+                                            Footer={<DeleteFooter />}
+                                        />
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </Container>
+            </Fragment>
+        )
 }
 
 const mapStateToProps = state => ({
+    ////// General
+    isActionLoading: state.General.isActionLoading,
+    isComponentLoading: state.General.isComponentLoading,
     ////// Auth
     User: state.Auth.User,
     ////// User

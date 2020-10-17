@@ -6,17 +6,23 @@ import { Route, Redirect } from 'react-router-dom'
 
 import { Cek_Privacy_Access } from '../Store/DataBases/Menu.DataBases'
 
-const PrivateRoute = ({ component: Component, Auth, SecurityType, ...rest }) => (
+import { Backdrop, CircularProgress } from '@material-ui/core'
+
+const PrivateRoute = ({ component: Component, Auth, General, SecurityType, ...rest }) => (
     <Route
         {...rest}
         render={props => {
-            if (Auth.isAuthLoading) {
+            if (General.isPageLoading) {
                 return (
-                    <center>
-                        <h2>
-                            Loading
-                        </h2>
-                    </center>
+                    <Backdrop
+                        open={General.isPageLoading}
+                    >
+                        <CircularProgress
+                            size={400}
+                            thickness={30}
+                            color='primary'
+                        />
+                    </Backdrop>
                 )
             } else if (!Auth.isAuth) {
                 ////// dispatch 401 error messages
@@ -69,6 +75,8 @@ const PrivateRoute = ({ component: Component, Auth, SecurityType, ...rest }) => 
 )
 
 const mapStateToProps = state => ({
+    ////// General
+    General: state.General,
     ////// Auth
     Auth: state.Auth,
     // User: state.Auth.User,

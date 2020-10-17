@@ -2,7 +2,7 @@ import React, { Fragment } from 'react'
 
 import { connect } from 'react-redux'
 
-import { useMediaQuery, Container, Typography, Grid } from '@material-ui/core'
+import { useMediaQuery, Container, Grid, Fade } from '@material-ui/core'
 import { MUI_Initial_State, MUI_VerticalMargin } from '../../MUI'
 
 import { Cek_Privacy_Access, Major_Menu_Data } from '../../Store/DataBases/Menu.DataBases'
@@ -20,13 +20,13 @@ const MainMenu = (props) => {
 
     return (
         <Container>
-            <Typography
-                variant='h2'
-                align='center'
-                style={{ fontSize: '4vw' }}
-            >
-                Main Menu
-            </Typography>
+            <center>
+                <TitleMenu
+                    Url={MenuData[MenuData.length - 1].Url}
+                    Title='Main Menu'
+                    Animated={true}
+                />
+            </center>
 
             {MenuData.map((item, index) => (
                 <div
@@ -36,12 +36,18 @@ const MainMenu = (props) => {
                     {(index > 0 && index < MenuData.length - 1) ?
                         Cek_Privacy_Access(item.PrivacyType) ?
                             <Fragment>
-                                <TitleMenu
-                                    isFullScreen={isFullScreen}
-                                    Title={item.Title ? item.Title : null}
-                                    Url={item.Url ? item.Url : null}
-                                    Description={item.Description ? item.Description : null}
-                                />
+                                <Fade
+                                    in={true}
+                                    timeout={700 + (200 * index)}
+                                >
+                                    <TitleMenu
+                                        isFullScreen={isFullScreen}
+                                        Title={item.Title ? item.Title : null}
+                                        Url={item.Url ? item.Url : null}
+                                        Description={item.Description ? item.Description : null}
+                                        Animated={true}
+                                    />
+                                </Fade>
 
                                 {
                                     item.MenuList ?

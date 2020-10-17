@@ -28,6 +28,7 @@ const MenuText = (props) => {
                     Title={MenuTitle}
                     Independent={true}
                     Description={MenuDescription}
+                    Animated={true}
                 />
             </center>
             <Grid

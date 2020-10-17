@@ -6,7 +6,7 @@ import { Get_User_Id } from '../../../Store/Actions/User.Actions'
 
 import { Redirect } from 'react-router-dom'
 
-import { Container, Paper, Typography, Button, Fade } from '@material-ui/core'
+import { useTheme, Container, Paper, Typography, Button, CircularProgress, Fade } from '@material-ui/core'
 import { MUI_VerticalMargin } from '../../../MUI'
 
 import CreateModal from '../../Containers/CreateModal'
@@ -23,6 +23,8 @@ const UserProfile = (props) => {
         // eslint-disable-next-line
     }, [])
 
+    const Theme = useTheme()
+    const ThemeSuccess = Theme.palette.success.main
     const ButtonStyle = { ...MUI_VerticalMargin, width: '98%' }
 
     if (!props.isAuth && !props.token) {
@@ -70,11 +72,18 @@ const UserProfile = (props) => {
                             variant='contained'
                             color='secondary'
                             size='large'
+                            disabled={props.isActionLoading ? true : false}
                             onClick={() => props.Log_Out()}
                             style={{ ...ButtonStyle }}
                         >
                             Log Out
-                    </Button>
+                            {
+                                props.isActionLoading && <CircularProgress
+                                    size={24}
+                                    thickness={8}
+                                    style={{ color: ThemeSuccess, position: 'absolute' }}
+                                />}
+                        </Button>
                     </center>
                 </Paper>
             </Fade >
@@ -83,6 +92,8 @@ const UserProfile = (props) => {
 }
 
 const mapStateToProps = state => ({
+    ////// General
+    isActionLoading: state.General.isActionLoading,
     ////// Auth
     isAuth: state.Auth.isAuth,
     token: state.Auth.token,

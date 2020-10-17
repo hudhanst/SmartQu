@@ -1,6 +1,6 @@
 import {
-    AUTH_LOADING,
-    AUTH_LOADED,
+    // AUTH_LOADING,
+    // AUTH_LOADED,
     LOGIN,
     LOGOUT,
     LOAD_USER,
@@ -10,22 +10,22 @@ import {
 const initialState = {
     token: localStorage.getItem('SQ_Auth_token'),
     isAuth: localStorage.getItem('SQ_Auth_isAuth'),
-    isAuthLoading: false,
+    // isAuthLoading: false,
     User: null,
 }
 
 export default function (state = initialState, action) {
     switch (action.type) {
-        case AUTH_LOADING:
-            return {
-                ...state,
-                isAuthLoading: true
-            }
-        case AUTH_LOADED:
-            return {
-                ...state,
-                isAuthLoading: false
-            }
+        // case AUTH_LOADING:
+        //     return {
+        //         ...state,
+        //         isAuthLoading: true
+        //     }
+        // case AUTH_LOADED:
+        //     return {
+        //         ...state,
+        //         isAuthLoading: false
+        //     }
         case LOGIN:
             localStorage.setItem('SQ_Auth_token', action.payload.token)
             localStorage.setItem('SQ_Auth_isAuth', true)

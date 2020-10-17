@@ -29,6 +29,7 @@ const MenuImage = (props) => {
                     Title={MenuTitle}
                     Independent={true}
                     Description={MenuDescription}
+                    Animated={true}
                 />
             </center>
             <Grid

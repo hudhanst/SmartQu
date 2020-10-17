@@ -5,7 +5,7 @@ import { Log_In } from '../../Store/Actions/Auth.Actions'
 
 import { Redirect } from 'react-router-dom'
 
-import { Container, Paper, Typography, TextField, InputAdornment, IconButton, Button, Fade } from '@material-ui/core'
+import { useTheme, Container, Paper, Typography, TextField, InputAdornment, IconButton, Button, CircularProgress, Fade } from '@material-ui/core'
 import { MUI_FullWidth, MUI_VerticalMargin } from '../../MUI'
 
 import Logo from '../../IMG/Logo.png'
@@ -24,7 +24,10 @@ const Login = (props) => {
         e.preventDefault()
         props.Log_In(state.UserName, state.Password)
     }
-    
+
+    const Theme = useTheme()
+    const ThemeSuccess = Theme.palette.success.main
+
     if (props.isAuth && props.token) {
         return <Redirect to='/' />
     }
@@ -99,10 +102,17 @@ const Login = (props) => {
                             color='primary'
                             size='large'
                             type='submit'
+                            disabled={props.isActionLoading ? true : false}
                             style={{ ...MUI_FullWidth, ...MUI_VerticalMargin }}
                         >
                             Log In
-                    </Button>
+                            {
+                                props.isActionLoading && <CircularProgress
+                                    size={24}
+                                    thickness={8}
+                                    style={{ color: ThemeSuccess, position: 'absolute' }}
+                                />}
+                        </Button>
                     </form>
                 </Paper>
             </Fade>
@@ -111,6 +121,8 @@ const Login = (props) => {
 }
 
 const mapStateToProps = state => ({
+    ////// General
+    isActionLoading: state.General.isActionLoading,
     ////// Auth
     isAuth: state.Auth.isAuth,
     token: state.Auth.token,
